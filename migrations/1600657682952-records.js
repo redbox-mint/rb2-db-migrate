@@ -36,11 +36,11 @@ async function performUp() {
     delete record['date_object_created']
     delete record['date_object_modified']
     
-    const targetRecordCollection = await targetDb.collection('Record');
+    const targetRecordCollection = await targetDb.collection('record');
     let insertResult = await targetRecordCollection.insertOne(record);
     let recordMongoId = insertResult.ops[0]._id;
     
-    const targetRecordAuditCollection = await targetDb.collection('RecordAudit');
+    const targetRecordAuditCollection = await targetDb.collection('recordAudit');
     let auditRecord = {
       date: dateObjectModified,
       recordId: recordMongoId,

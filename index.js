@@ -1,11 +1,5 @@
 var migrate = require('migrate')
-global = {
-    config: {
-        sourceMongodb: "mongodb://localhost/redbox",
-        targetMongodb: "mongodb://localhost/redbox-storage",
-    }
-}
-
+global = require('./config')
 
 migrate.load({
   stateStore: '.migrate'
