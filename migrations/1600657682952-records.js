@@ -4,14 +4,36 @@ const mongodb = require('mongodb')
 const MongoClient = mongodb.MongoClient
 Bluebird.promisifyAll(MongoClient)
 
-const sourceUrl = global.config.sourceMongodb;
-const targetUrl = global.config.targetMongodb;
+let user = '';
+let admin = '';
+if (global.config.requiresUser) {
+
+  if(!process.env.USERNAME && !process.env.PASSWORD){
+    console.log(' USERNAME/PASSWORD not given in environment vars and required in config file, set requiresUser to false if not');
+    exit(-1);
+  }
+  const username = process.env.USERNAME;
+  const password = process.env.PASSWORD;
+  admin = '?authSource=admin';
+  user = `${username}:${password}@`;
+}
+let ssl = '';
+if (global.config.ssl) {
+  ssl = '?ssl=true';
+  if(admin != '')admin = '&authSource=admin';
+}
+let host = global.config.host;
+if(process.env.HOST) {
+   host = process.env.HOST;
+}
+const sourceUrl = `mongodb://${user}${host}/${global.config.sourceMongodb}${ssl}${admin}`;
+const targetUrl = `mongodb://${user}${host}/${global.config.targetMongodb}${ssl}${admin}`;
 
 async function performUp() {
   let mClient = null
-  let client = await MongoClient.connect(sourceUrl)
+  let client = await MongoClient.connect(sourceUrl,{ useNewUrlParser: true })
 
-  let targetClient = await MongoClient.connect(targetUrl)
+  let targetClient = await MongoClient.connect(targetUrl,{ useNewUrlParser: true })
   let targetDb = targetClient.db();
   
   let db = client.db();
