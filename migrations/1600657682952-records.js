@@ -51,7 +51,9 @@ async function performUp() {
 
     record.metaMetadata.packageType = packageType;
     record.metaMetadata.createdOn = dateObjectCreated;
-    record.metaMetadata.lastModified = dateObjectModified;
+    record.metaMetadata.lastSaveDate = dateObjectModified;
+    record.lastSaveDate = dateObjectModified;
+    record.dateCreated = dateObjectCreated;
     record.harvestId = oid;
 
     delete record.packageType
