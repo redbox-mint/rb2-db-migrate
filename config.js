@@ -1,6 +1,9 @@
 module.exports = {
     config: {
-        sourceMongodb: "mongodb://localhost/redbox",
-        targetMongodb: "mongodb://localhost/redbox-storage"
+        ssl: false,
+        host: "localhost",
+        requiresUser: true,
+        sourceMongodb: "redbox",
+        targetMongodb: "redbox-storage"
     }
 }
